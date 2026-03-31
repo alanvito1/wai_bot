@@ -3,6 +3,7 @@ import KnowledgeBase from "./pages/KnowledgeBase";
 import Leads from "./pages/Leads";
 import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/settings/Index";
+import Connection from "./pages/Connection";
 import { useState } from "react";
 import Login from "./pages/Login";
 
@@ -14,6 +15,7 @@ function App() {
             <div className="p-4">
                 <nav className="mb-4">
                     <Link to="/dashboard" className="mr-4">📊 Dashboard</Link>
+                    <Link to="/connection" className="mr-4">🔌 Conexão</Link>
                     <Link to="/knowledge" className="mr-4">📚 Base de Conhecimento</Link>
                     <Link to="/leads" className="mr-4">📋 Leads</Link>
                     <Link to="/settings" className="mr-4">⚙️ Configurações</Link>
@@ -21,6 +23,7 @@ function App() {
                 </nav>
                 <Routes>
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/connection" element={<Connection />} />
                     <Route path="/knowledge" element={<KnowledgeBase />} />
                     <Route path="/leads" element={<Leads />} />
                     <Route path="/settings/*" element={<Settings />} />

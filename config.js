@@ -64,6 +64,19 @@ O QUE EVITAR
 
 `,
     whatsappOptions: {
-        authStrategy: new (require('whatsapp-web.js').LocalAuth)()
+        authStrategy: new (require('whatsapp-web.js').LocalAuth)(),
+        puppeteer: {
+            headless: true,
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-accelerated-2d-canvas',
+                '--no-first-run',
+                '--no-zygote',
+                '--single-process', // Pode ajudar em ambientes de baixo recurso
+                '--disable-gpu'
+            ]
+        }
     }
 };

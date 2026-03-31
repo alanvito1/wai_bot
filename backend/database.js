@@ -10,37 +10,50 @@ const db = new sqlite3.Database(dbPath, err => {
     } else {
         console.log(`✅ Banco de dados conectado! Usando: ${dbPath}`);
 
-        // 🔹 Criar tabela de conhecimento
-        db.run(`CREATE TABLE IF NOT EXISTS conhecimento (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            pergunta TEXT UNIQUE,
-            resposta TEXT
-        )`);
+        db.serialize(() => {
+            // 🔹 Criar tabela de conhecimento
+            db.run(`CREATE TABLE IF NOT EXISTS conhecimento (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pergunta TEXT UNIQUE,
+                resposta TEXT
+            )`);
 
-         // 🔹 Criar tabela de mensagens
-         db.run(`CREATE TABLE IF NOT EXISTS mensagens (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT,
-            mensagem TEXT,
-            tipo TEXT CHECK(tipo IN ('recebida', 'enviada')),
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        )`);
+            // 🔹 Criar tabela de mensagens
+            db.run(`CREATE TABLE IF NOT EXISTS mensagens (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT,
+                mensagem TEXT,
+                tipo TEXT CHECK(tipo IN ('recebida', 'enviada')),
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )`);
 
-        // 🔹 Criar tabela de objeções
-        db.run(`CREATE TABLE IF NOT EXISTS objecoes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            objecao TEXT UNIQUE,
-            resposta TEXT
-        )`);
+            // 🔹 Criar tabela de objeções
+            db.run(`CREATE TABLE IF NOT EXISTS objecoes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                objecao TEXT UNIQUE,
+                resposta TEXT
+            )`);
 
-        // 🔹 Criar tabela do fluxo de simulação com todas as colunas
-        db.run(`CREATE TABLE IF NOT EXISTS simulacao (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            ordem INTEGER,
-            etapa TEXT,
-            pergunta TEXT,
-            validacao TEXT DEFAULT NULL
-        )`);
+            // 🔹 Criar tabela do fluxo de simulação com todas as colunas
+            db.run(`CREATE TABLE IF NOT EXISTS simulacao (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ordem INTEGER,
+                etapa TEXT,
+                pergunta TEXT,
+                validacao TEXT DEFAULT NULL
+            )`);
+
+            // 🔹 Criar tabela de status do sistema (para QR Code e Conexão)
+            db.run(`CREATE TABLE IF NOT EXISTS system_status (
+                id INTEGER PRIMARY KEY,
+                key TEXT UNIQUE,
+                value TEXT
+            )`);
+
+            // Inicializar status padrão
+            db.run(`INSERT OR IGNORE INTO system_status (id, key, value) VALUES (1, 'qr', '')`);
+            db.run(`INSERT OR IGNORE INTO system_status (id, key, value) VALUES (2, 'status', 'disconnected')`);
+        });
     }
 });
 
@@ -157,6 +170,26 @@ function excluirEtapaSimulacao(id) {
     });
 }
 
+/** 🔹 STATUS DO SISTEMA */
+function atualizarStatusSistemas(key, value) {
+    db.run(`INSERT INTO system_status (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = ?`, [key, value, value], err => {
+        if (err) {
+            console.error(`⚠️ Erro ao atualizar status (${key}):`, err.message);
+        }
+    });
+}
+
+function buscarStatusSistemas(key, callback) {
+    db.get(`SELECT value FROM system_status WHERE key = ?`, [key], (err, row) => {
+        if (err) {
+            console.error(`❌ Erro ao buscar status (${key}):`, err.message);
+            callback(null);
+        } else {
+            callback(row ? row.value : null);
+        }
+    });
+}
+
 module.exports = {
     db,
     adicionarObjecao,
@@ -167,5 +200,7 @@ module.exports = {
     adicionarEtapaSimulacao,
     buscarFluxoSimulacao,
     atualizarEtapaSimulacao,
-    excluirEtapaSimulacao
+    excluirEtapaSimulacao,
+    atualizarStatusSistemas,
+    buscarStatusSistemas
 };

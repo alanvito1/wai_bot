@@ -1,0 +1,21 @@
+# Ignorar dependências locais
+node_modules
+npm-debug.log
+
+# Ignorar arquivos sensíveis e locais
+.env
+.git
+.gitignore
+.agent
+.gemini
+
+# Ignorar persistência do bot (será mapeada via volume)
+.wwebjs_auth
+.wwebjs_cache
+backend/database.sqlite
+*.sqlite
+
+# Ignorar arquivos do próprio Docker
+Dockerfile
+docker-compose.yml
+frontend/Dockerfile

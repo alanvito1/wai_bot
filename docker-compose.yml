@@ -1,0 +1,27 @@
+services:
+  app:
+    build: .
+    container_name: waibot-app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./.env:/app/.env
+      - ./.wwebjs_auth:/app/.wwebjs_auth
+      - ./.wwebjs_cache:/app/.wwebjs_cache
+      - ./backend/database.sqlite:/app/backend/database.sqlite
+    # Necessário para o Puppeteer rodar suave no Linux
+    shm_size: '2gb'
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: waibot-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    # O frontend depende da API estar de pé
+    depends_on:
+      - app
+    restart: unless-stopped

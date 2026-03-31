@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-const { db } = require("./database");
-const apiRoutes = require("./api"); // 📌 Importando a API
+const { db, buscarStatusSistemas } = require("./database");
+const apiRoutes = require("./api");
 
 const app = express();
 const PORT = 5000;
@@ -31,6 +31,15 @@ app.post("/api/settings", (req, res) => {
     Promise.all(queries)
         .then(() => res.json({ message: "✅ Configurações salvas!" }))
         .catch(err => res.status(500).json({ error: err.message }));
+});
+
+// ✅ API de Status do Bot (QR Code)
+app.get("/api/status", (req, res) => {
+    buscarStatusSistemas('status', (status) => {
+        buscarStatusSistemas('qr', (qr) => {
+            res.json({ status, qr });
+        });
+    });
 });
 
 // 🔹 Rotas da API
