@@ -1,0 +1,8 @@
+frontend/src/pages/
+│── settings/
+│   ├── GeneralSettings.js   # ⚙️ Configurações Gerais (este arquivo)
+│   ├── AISettings.js        # 🤖 Configurações da IA
+│   ├── MessageSettings.js   # 💬 Configurações de Mensagens & Fluxo
+│   ├── SimulationSettings.js # 📊 Configurações de Simulação & Coleta de Dados
+│   ├── KnowledgeBase.js     # 📚 Banco de Conhecimento & Objeções
+│   ├── index.js             # 🔹 Página principal das configurações (com as abas)

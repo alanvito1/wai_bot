@@ -1,0 +1,13 @@
+/comunidadezdg
+│── index.js          # Arquivo principal (inicializa o bot)
+│── bot.js            # Gerencia eventos do WhatsApp
+│── simulacao.js      # Fluxo da simulação de consórcio
+│── ia.js             # Módulo da IA (integra com API da DeepSeek)
+│── database.js       # Gerencia banco de dados SQLite
+│── disparo.js        # Módulo de disparo em massa (trabalharemos depois)
+│── utils.js          # Funções auxiliares (ex: sendMessage)
+│── config.js         # Configurações gerais (ex: número do admin, chave da API)
+│── database.sqlite   # Banco de dados SQLite
+│── conhecimento/     # Pasta com PDFs, artigos e materiais para a IA aprender
+│── package.json      # Dependências do projeto
+└── README.md         # Instruções para configuração e uso

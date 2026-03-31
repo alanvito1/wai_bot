@@ -1,0 +1,21 @@
+waibot/
+│── backend/               # Servidor Node.js (API)
+│   ├── database.js        # Banco de Dados SQLite
+│   ├── server.js          # API Express.js
+│   ├── routes/
+│   │   ├── knowledge.js   # Gerencia perguntas/respostas da IA
+│   │   ├── leads.js       # Gerencia os leads capturados
+│   │   ├── logs.js        # Exibe logs do chatbot
+│── frontend/              # Interface React.js
+│   ├── src/
+│   │   ├── components/    # Componentes reutilizáveis
+│   │   ├── pages/         # Páginas do painel
+│   │   ├── App.js         # Aplicação principal
+│   ├── public/            # Arquivos estáticos
+│── bot/                   # Código do chatbot
+│   ├── index.js           # Entrada do chatbot
+│   ├── ia.js              # Lógica da IA
+│   ├── simulacao.js       # Lógica da Simulação
+│   ├── database.js        # Banco de dados do bot
+│── .env                   # Configurações
+│── package.json           # Dependências do projeto
